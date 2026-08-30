@@ -51,9 +51,9 @@ jobs:
       - name: Prepare Decrypter and Decrypt OFP
         shell: bash
         run: |
-          sudo apt-fast update -qqy
-          sudo apt-fast -y install python3-testresources
-          sudo apt-fast install -qqy openssl rsync sshpass rclone
+          sudo apt-get update -qqy
+          sudo apt-get -y install python3-testresources
+          sudo apt-get install -qqy openssl rsync sshpass rclone
           sudo pip3 install --upgrade pip wheel setuptools
           sudo pip3 install --upgrade pycryptodome
           sudo apt install simg2img
