@@ -1,91 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="#0F172A"
-    android:padding="24dp">
+    android:fillViewport="true"
+    android:background="#0F172A">
 
-    <!-- App Title -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Roblox Fast Launcher"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="36dp"/>
-
-    <!-- Colorful Box Grid sa Gitna -->
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alignmentMode="alignMargins"
-        android:columnCount="2"
-        android:rowCount="2"
-        android:useDefaultMargins="true"
-        android:layout_gravity="center">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp">
 
-        <!-- Roblox Box (Red/Orange) -->
-        <Button
-            android:id="@+id/btnRoblox"
-            android:layout_width="0dp"
-            android:layout_height="110dp"
-            android:layout_columnWeight="1"
-            android:text="Roblox"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fast Web"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="26sp"
             android:textStyle="bold"
-            android:backgroundTint="#EF4444"
-            android:elevation="6dp"/>
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"/>
 
-        <!-- TikTok Box (Pink/Dark) -->
-        <Button
-            android:id="@+id/btnTiktok"
-            android:layout_width="0dp"
-            android:layout_height="110dp"
-            android:layout_columnWeight="1"
-            android:text="TikTok"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:backgroundTint="#EC4899"
-            android:elevation="6dp"/>
+        <LinearLayout
+            android:id="@+id/menuLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
 
-        <!-- YouTube Box (Red) -->
-        <Button
-            android:id="@+id/btnYoutube"
-            android:layout_width="0dp"
-            android:layout_height="110dp"
-            android:layout_columnWeight="1"
-            android:text="YouTube"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:backgroundTint="#DC2626"
-            android:elevation="6dp"/>
+            <Button
+                android:id="@+id/btnRoblox"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Roblox"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#EF4444"
+                android:layout_marginBottom="16dp"
+                android:elevation="4dp"/>
 
-        <!-- Web Engine Box (Blue) -->
-        <Button
-            android:id="@+id/btnWebSearch"
-            android:layout_width="0dp"
-            android:layout_height="110dp"
-            android:layout_columnWeight="1"
-            android:text="Website Engine"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:backgroundTint="#2563EB"
-            android:elevation="6dp"/>
+            <Button
+                android:id="@+id/btnTiktok"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="TikTok"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#EC4899"
+                android:layout_marginBottom="16dp"
+                android:elevation="4dp"/>
 
-    </GridLayout>
+            <Button
+                android:id="@+id/btnYoutube"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="YouTube"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#DC2626"
+                android:layout_marginBottom="16dp"
+                android:elevation="4dp"/>
 
-    <!-- WebView na nakatago muna sa simula hangga't hindi pumipili ng website -->
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
+            <Button
+                android:id="@+id/btnWebSearch"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Website Engine"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#2563EB"
+                android:elevation="4dp"/>
 
-</LinearLayout>
+        </LinearLayout>
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</ScrollView>
