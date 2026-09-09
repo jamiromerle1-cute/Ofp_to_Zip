@@ -3,20 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#121212"
-    android:padding="16dp">
+    android:gravity="center"
+    android:background="#0F172A"
+    android:padding="24dp">
 
+    <!-- App Title -->
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Roblox Fast Launcher"
         android:textColor="#FFFFFF"
-        android:textSize="22sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginBottom="36dp"/>
 
+    <!-- Colorful Box Grid sa Gitna -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,61 +27,65 @@
         android:useDefaultMargins="true"
         android:layout_gravity="center">
 
+        <!-- Roblox Box (Red/Orange) -->
         <Button
             android:id="@+id/btnRoblox"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_columnWeight="1"
             android:text="Roblox"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:backgroundTint="#2D2D2D"
-            android:elevation="4dp"/>
+            android:backgroundTint="#EF4444"
+            android:elevation="6dp"/>
 
+        <!-- TikTok Box (Pink/Dark) -->
         <Button
             android:id="@+id/btnTiktok"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_columnWeight="1"
             android:text="TikTok"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:backgroundTint="#2D2D2D"
-            android:elevation="4dp"/>
+            android:backgroundTint="#EC4899"
+            android:elevation="6dp"/>
 
+        <!-- YouTube Box (Red) -->
         <Button
             android:id="@+id/btnYoutube"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_columnWeight="1"
             android:text="YouTube"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:backgroundTint="#2D2D2D"
-            android:elevation="4dp"/>
+            android:backgroundTint="#DC2626"
+            android:elevation="6dp"/>
 
+        <!-- Web Engine Box (Blue) -->
         <Button
             android:id="@+id/btnWebSearch"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_columnWeight="1"
-            android:text="Select Web Engine"
+            android:text="Website Engine"
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:backgroundTint="#1E3A8A"
-            android:elevation="4dp"/>
+            android:backgroundTint="#2563EB"
+            android:elevation="6dp"/>
 
     </GridLayout>
 
+    <!-- WebView na nakatago muna sa simula hangga't hindi pumipili ng website -->
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </LinearLayout>
