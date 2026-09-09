@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Ad Blocker domains
         blockedDomains.add("googlesyndication.com");
         blockedDomains.add("adservice.google.com");
         blockedDomains.add("doubleclick.net");
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 if (!isAdBlockEnabled) {
                     return super.shouldInterceptRequest(view, request);
-                },
+                }
                 String url = request.getUrl().toString().toLowerCase();
                 for (String domain : blockedDomains) {
                     if (url.contains(domain)) {
@@ -81,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageFinished(view, url);
                 if (url.contains("tiktok.com")) {
                     setDesktopMode(true);
-                } else {
-                    setDesktopMode(false);
                 }
             }
         });
