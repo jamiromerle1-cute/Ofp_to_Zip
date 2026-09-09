@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="#0F172A">
 
-    <!-- Hidden URL Bar by default, appears on tap/refresh if needed -->
+    <!-- Visible URL Bar when browsing -->
     <LinearLayout
         android:id="@+id/urlBarLayout"
         android:layout_width="match_parent"
@@ -59,7 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fast Web"
+                android:text="Fast Web (Updated)"
                 android:textColor="#FFFFFF"
                 android:textSize="26sp"
                 android:textStyle="bold"
@@ -117,7 +117,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Fullscreen WebView -->
+    <!-- WebView -->
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"

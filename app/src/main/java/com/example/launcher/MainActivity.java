@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Auto full-screen pag pinindot ang Roblox, TikTok, o YouTube
         btnRoblox.setOnClickListener(v -> openFullscreenWebsite("https://www.roblox.com"));
         btnTiktok.setOnClickListener(v -> openFullscreenWebsite("https://www.tiktok.com"));
         btnYoutube.setOnClickListener(v -> openFullscreenWebsite("https://www.youtube.com"));
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openFullscreenWebsite(String url) {
         menuScrollView.setVisibility(View.GONE);
-        urlBarLayout.setVisibility(View.GONE); // Naka-hide para siksik at true full screen
+        urlBarLayout.setVisibility(View.VISIBLE); // Ipapakita na ang Enter URL bar sa itaas
         webView.setVisibility(View.VISIBLE);
         webView.loadUrl(url);
     }
