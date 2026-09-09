@@ -3,83 +3,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="#121212">
+    android:background="#121212"
+    android:padding="16dp">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
-
-        <Spinner
-            android:id="@+id/engineSpinner"
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:backgroundTint="#FFFFFF"
-            android:popupBackground="#333333"/>
-
-        <EditText
-            android:id="@+id/urlInput"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:hint="Type URL or search..."
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA"
-            android:inputType="textUri"
-            android:padding="8dp"/>
-
-        <Button
-            android:id="@+id/btnGo"
-            android:layout_width="60dp"
-            android:layout_height="48dp"
-            android:text="Go"
-            android:backgroundTint="#FF5722"
-            android:textColor="#FFFFFF"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:text="Roblox Fast Launcher"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alignmentMode="alignMargins"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:useDefaultMargins="true"
+        android:layout_gravity="center">
 
         <Button
             android:id="@+id/btnRoblox"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
             android:text="Roblox"
-            android:backgroundTint="#00E676"
-            android:textColor="#000000"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnYoutube"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="YouTube"
-            android:backgroundTint="#FF0000"
             android:textColor="#FFFFFF"
-            android:layout_marginEnd="4dp"/>
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="#2D2D2D"
+            android:elevation="4dp"/>
 
         <Button
             android:id="@+id/btnTiktok"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
             android:text="TikTok"
-            android:backgroundTint="#212121"
-            android:textColor="#FFFFFF"/>
-    </LinearLayout>
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="#2D2D2D"
+            android:elevation="4dp"/>
+
+        <Button
+            android:id="@+id/btnYoutube"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:text="YouTube"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="#2D2D2D"
+            android:elevation="4dp"/>
+
+        <Button
+            android:id="@+id/btnWebSearch"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_columnWeight="1"
+            android:text="Select Web Engine"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#1E3A8A"
+            android:elevation="4dp"/>
+
+    </GridLayout>
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>
