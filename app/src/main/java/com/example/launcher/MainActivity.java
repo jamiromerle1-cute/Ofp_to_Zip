@@ -47,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnRoblox.setOnClickListener(v -> openWebsite("https://www.roblox.com"));
-        btnTiktok.setOnClickListener(v -> openWebsite("https://www.tiktok.com"));
-        btnYoutube.setOnClickListener(v -> openWebsite("https://www.youtube.com"));
+        // Auto full-screen pag pinindot ang Roblox, TikTok, o YouTube
+        btnRoblox.setOnClickListener(v -> openFullscreenWebsite("https://www.roblox.com"));
+        btnTiktok.setOnClickListener(v -> openFullscreenWebsite("https://www.tiktok.com"));
+        btnYoutube.setOnClickListener(v -> openFullscreenWebsite("https://www.youtube.com"));
 
         btnWebSearch.setOnClickListener(v -> {
             String[] engines = {"Google", "Yahoo", "Bing", "DuckDuckGo"};
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     case 2: currentSearchEngine = "https://www.bing.com/search?q="; break;
                     case 3: currentSearchEngine = "https://duckduckgo.com/?q="; break;
                 }
-                openWebsite(currentSearchEngine.replace("search?q=", "").replace("search?p=", ""));
+                openFullscreenWebsite(currentSearchEngine.replace("search?q=", "").replace("search?p=", ""));
             });
             builder.show();
         });
@@ -77,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void openWebsite(String url) {
+    private void openFullscreenWebsite(String url) {
         menuScrollView.setVisibility(View.GONE);
-        urlBarLayout.setVisibility(View.VISIBLE);
+        urlBarLayout.setVisibility(View.GONE); // Naka-hide para siksik at true full screen
         webView.setVisibility(View.VISIBLE);
         webView.loadUrl(url);
     }

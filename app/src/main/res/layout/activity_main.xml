@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="#0F172A">
 
-    <!-- Top URL / Search Bar (Lalabas lang kapag nasa website na) -->
+    <!-- Hidden URL Bar by default, appears on tap/refresh if needed -->
     <LinearLayout
         android:id="@+id/urlBarLayout"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="Search or enter URL"
+            android:hint="Enter URL or search"
             android:textColor="#FFFFFF"
             android:textColorHint="#94A3B8"
             android:textSize="14sp"
@@ -117,7 +117,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- WebView -->
+    <!-- Fullscreen WebView -->
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
