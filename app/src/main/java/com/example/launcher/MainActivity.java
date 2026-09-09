@@ -3,17 +3,22 @@ package com.example.launcher;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
-    private View menuLayout;
+    private View menuScrollView;
+    private LinearLayout urlBarLayout;
+    private EditText etUrlInput;
+    private String currentSearchEngine = "https://www.google.com/search?q=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +26,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         webView = findViewById(R.id.webView);
-        menuLayout = findViewById(R.id.menuLayout);
+        menuScrollView = findViewById(R.id.menuScrollView);
+        urlBarLayout = findViewById(R.id.urlBarLayout);
+        etUrlInput = findViewById(R.id.etUrlInput);
+        Button btnGo = findViewById(R.id.btnGo);
 
         Button btnRoblox = findViewById(R.id.btnRoblox);
         Button btnTiktok = findViewById(R.id.btnTiktok);
@@ -31,7 +39,13 @@ public class MainActivity extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                etUrlInput.setText(url);
+            }
+        });
 
         btnRoblox.setOnClickListener(v -> openWebsite("https://www.roblox.com"));
         btnTiktok.setOnClickListener(v -> openWebsite("https://www.tiktok.com"));
@@ -42,26 +56,46 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Select your web engine");
             builder.setItems(engines, (dialog, which) -> {
-                String url = "https://www.google.com";
                 switch (which) {
-                    case 0: url = "https://www.google.com"; break;
-                    case 1: url = "https://search.yahoo.com"; break;
-                    case 2: url = "https://www.bing.com"; break;
-                    case 3: url = "https://duckduckgo.com"; break;
+                    case 0: currentSearchEngine = "https://www.google.com/search?q="; break;
+                    case 1: currentSearchEngine = "https://search.yahoo.com/search?p="; break;
+                    case 2: currentSearchEngine = "https://www.bing.com/search?q="; break;
+                    case 3: currentSearchEngine = "https://duckduckgo.com/?q="; break;
                 }
-                openWebsite(url);
+                openWebsite(currentSearchEngine.replace("search?q=", "").replace("search?p=", ""));
             });
             builder.show();
+        });
+
+        btnGo.setOnClickListener(v -> performSearchOrNav());
+        etUrlInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                performSearchOrNav();
+                return true;
+            }
+            return false;
         });
     }
 
     private void openWebsite(String url) {
-        menuLayout.setVisibility(View.GONE);
-        ViewGroup.LayoutParams params = webView.getLayoutParams();
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        webView.setLayoutParams(params);
+        menuScrollView.setVisibility(View.GONE);
+        urlBarLayout.setVisibility(View.VISIBLE);
         webView.setVisibility(View.VISIBLE);
         webView.loadUrl(url);
+    }
+
+    private void performSearchOrNav() {
+        String query = etUrlInput.getText().toString().trim();
+        if (query.isEmpty()) return;
+
+        if (query.startsWith("http://") || query.startsWith("https://") || query.contains(".com") || query.contains(".org") || query.contains(".net")) {
+            if (!query.startsWith("http://") && !query.startsWith("https://")) {
+                query = "https://" + query;
+            }
+            webView.loadUrl(query);
+        } else {
+            webView.loadUrl(currentSearchEngine + query);
+        }
     }
 
     @Override
@@ -70,11 +104,9 @@ public class MainActivity extends AppCompatActivity {
             webView.goBack();
         } else if (webView.getVisibility() == View.VISIBLE) {
             webView.setVisibility(View.GONE);
+            urlBarLayout.setVisibility(View.GONE);
             webView.loadUrl("about:blank");
-            ViewGroup.LayoutParams params = webView.getLayoutParams();
-            params.height = 0;
-            webView.setLayoutParams(params);
-            menuLayout.setVisibility(View.VISIBLE);
+            menuScrollView.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
