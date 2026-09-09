@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_toggle_desktop"
+        android:title="Toggle Desktop Site"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_toggle_adblock"
+        android:title="Toggle Ad Blocker"
+        app:showAsAction="never"/>
+</menu>
