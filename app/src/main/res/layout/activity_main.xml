@@ -1,223 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#0F172A">
+    android:background="#000000">
 
-    <!-- Top Tab Bar para sa mabilis na paglipat ng tabs -->
-    <HorizontalScrollView
-        android:id="@+id/tabBarLayout"
+    <!-- Camera Preview Placeholder / Simulated View -->
+    <View
+        android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#1E293B"
-        android:scrollbars="none"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:background="#1C1C1E"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="4dp">
-
-            <Button
-                android:id="@+id/tabRoblox"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Roblox"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:backgroundTint="#EF4444"
-                android:layout_marginHorizontal="4dp"/>
-
-            <Button
-                android:id="@+id/tabTiktok"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="TikTok"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:backgroundTint="#EC4899"
-                android:layout_marginHorizontal="4dp"/>
-
-            <Button
-                android:id="@+id/tabYoutube"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="YouTube"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:backgroundTint="#DC2626"
-                android:layout_marginHorizontal="4dp"/>
-
-            <Button
-                android:id="@+id/tabWebSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Engine"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:backgroundTint="#2563EB"
-                android:layout_marginHorizontal="4dp"/>
-
-            <Button
-                android:id="@+id/tabHome"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Home"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:backgroundTint="#475569"
-                android:layout_marginHorizontal="4dp"/>
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <!-- URL Bar / Enter URL -->
+    <!-- Top Bar with 3 Dots Menu -->
     <LinearLayout
-        android:id="@+id/urlBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="#1E293B"
-        android:padding="8dp"
-        android:visibility="gone"
-        android:gravity="center_vertical">
+        android:gravity="end|center_vertical"
+        android:paddingHorizontal="16dp">
 
-        <EditText
-            android:id="@+id/etUrlInput"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:hint="Enter URL or search"
+        <TextView
+            android:id="@+id/btnThreeDots"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="⋮"
             android:textColor="#FFFFFF"
-            android:textColorHint="#94A3B8"
-            android:textSize="14sp"
-            android:background="#334155"
-            android:paddingHorizontal="12dp"
-            android:singleLine="true"
-            android:imeOptions="actionGo"/>
-
-        <Button
-            android:id="@+id/btnGo"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Go"
-            android:backgroundTint="#2563EB"
-            android:textColor="#FFFFFF"
-            android:layout_marginStart="8dp"
-            android:minWidth="60dp"/>
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
     </LinearLayout>
 
-    <!-- Main Menu ScrollView -->
-    <ScrollView
-        android:id="@+id/menuScrollView"
+    <!-- iOS Style Bottom Controls -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#99000000">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="24dp">
+        <Button
+            android:id="@+id/btnCapture"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="4dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fast Web (Tabs)"
-                android:textColor="#FFFFFF"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="32dp"/>
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/btnRoblox"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:text="Roblox"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:backgroundTint="#EF4444"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp"/>
-
-            <Button
-                android:id="@+id/btnTiktok"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:text="TikTok"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:backgroundTint="#EC4899"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp"/>
-
-            <Button
-                android:id="@+id/btnYoutube"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:text="YouTube"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:backgroundTint="#DC2626"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp"/>
-
-            <Button
-                android:id="@+id/btnWebSearch"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:text="Website Engine"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:backgroundTint="#2563EB"
-                android:layout_marginBottom="16dp"
-                android:elevation="4dp"/>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- WebView Container -->
-    <FrameLayout
-        android:id="@+id/webContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="gone">
-
-        <WebView
-            android:id="@+id/webViewRoblox"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-
-        <WebView
-            android:id="@+id/webViewTiktok"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-
-        <WebView
-            android:id="@+id/webViewYoutube"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-
-        <WebView
-            android:id="@+id/webViewEngine"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-
-    </FrameLayout>
-
-</LinearLayout>
+</RelativeLayout>
