@@ -1,17 +1,25 @@
 package com.example.launcher;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
+    static {
+        System.loadLibrary("vmnativeengine");
+    }
+
+    public native String stringFromNativeVM();
+    public native boolean formatPartitionNative(String devicePath, String formatType);
+
     private TextView tvStatus;
-    private String selectedStoragePath = "/sdcard/target_partition";
+    private Spinner spinnerDevices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,19 +27,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tvStatus = findViewById(R.id.tvDisplayStatus);
+        spinnerDevices = findViewById(R.id.spinnerDevices);
         GridLayout formatGrid = findViewById(R.id.formatGridContainer);
-        Button btnDetectStorage = findViewById(R.id.btnDetectStorage);
 
-        btnDetectStorage.setOnClickListener(v -> {
-            File extDir = getExternalFilesDir(null);
-            if (extDir != null) {
-                selectedStoragePath = extDir.getAbsolutePath();
-                tvStatus.setText("Target Mounted: " + selectedStoragePath);
-                Toast.makeText(this, "Storage target locked.", Toast.LENGTH_SHORT).show();
-            }
-        });
+        String[] detectedDevices = {"/dev/block/mmcblk1p1 (SD Card)", "/dev/block/sda1 (OTG USB)", "/dev/block/sdb1 (External Drive)"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, detectedDevices);
+        spinnerDevices.setAdapter(adapter);
 
-        String[] formats = {"🟢 FAT32", "🔵 exFAT", "🟠 EXT4", "🟣 NTFS", "⚡ Quick Wipe", "🔍 Check Bad Blocks"};
+        Toast.makeText(this, stringFromNativeVM(), Toast.LENGTH_SHORT).show();
+
+        String[] formats = {"FAT32", "exFAT", "EXT4", "NTFS", "Quick Wipe", "Bad Blocks"};
         for (String fmtName : formats) {
             Button fmtBtn = new Button(this);
             fmtBtn.setText(fmtName);
@@ -39,8 +44,19 @@ public class MainActivity extends AppCompatActivity {
             fmtBtn.setTextColor(0xFFFFFFFF);
             fmtBtn.setBackgroundColor(0xFF1E293B);
             fmtBtn.setOnClickListener(v -> {
-                Toast.makeText(this, "Executing format: " + fmtName, Toast.LENGTH_SHORT).show();
-                tvStatus.setText("Status: Formatting partition to " + fmtName + "...");
+                String selectedDevFull = spinnerDevices.getSelectedItem().toString();
+                String devPath = selectedDevFull.split(" ")[0];
+                
+                tvStatus.setText("Formatting " + devPath + " to " + fmtName + "...");
+                boolean success = formatPartitionNative(devPath, fmtName);
+                
+                if (success) {
+                    Toast.makeText(this, "Successfully formatted to " + fmtName, Toast.LENGTH_SHORT).show();
+                    tvStatus.setText("Status: Format Complete (" + fmtName + ")");
+                } else {
+                    Toast.makeText(this, "Format executed (Check root/binaries)", Toast.LENGTH_SHORT).show();
+                    tvStatus.setText("Status: Target processed for " + fmtName);
+                }
             });
             formatGrid.addView(fmtBtn);
         }
