@@ -4,12 +4,11 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <!-- Camera Preview Placeholder / Simulated View -->
-    <View
-        android:id="@+id/cameraPreview"
+    <!-- Real Camera TextureView Preview -->
+    <TextureView
+        android:id="@+id/textureView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#1C1C1E"/>
+        android:layout_height="match_parent"/>
 
     <!-- Top Bar with 3 Dots Menu -->
     <LinearLayout
