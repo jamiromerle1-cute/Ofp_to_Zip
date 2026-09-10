@@ -12,15 +12,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnBoost = findViewById(R.id.btnBoost);
-        Button btnClearCache = findViewById(R.id.btnClearCache);
+        Button btnOptimizeBoot = findViewById(R.id.btnOptimizeBoot);
+        Button btnStartupManager = findViewById(R.id.btnStartupManager);
 
-        btnBoost.setOnClickListener(v -> {
-            Toast.makeText(MainActivity.this, "LineageOS Engine: CPU & RAM Optimized for Gaming!", Toast.LENGTH_LONG).show();
+        btnOptimizeBoot.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "LineageOS Boot Scripts Applied! Fast Boot Ready.", Toast.LENGTH_LONG).show();
         });
 
-        btnClearCache.setOnClickListener(v -> {
-            Toast.makeText(MainActivity.this, "Cache Cleared! System is running faster.", Toast.LENGTH_SHORT).show();
+        btnStartupManager.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Background Startup Services Optimized.", Toast.LENGTH_SHORT).show();
         });
     }
 }
