@@ -4,76 +4,63 @@
     android:layout_height="match_parent"
     android:background="#020617">
 
-    <SurfaceView
-        android:id="@+id/vmSurfaceView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:background="#DD0F172A"
-        android:padding="10dp"
+        android:padding="16dp"
         android:layout_alignParentTop="true">
 
-        <Button
-            android:id="@+id/btnLoadImg"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_weight="1"
-            android:text="📂 Load GSI"
-            android:textColor="#FFFFFF"
-            android:textSize="9sp"
-            android:backgroundTint="#2563EB"
-            android:layout_marginEnd="4dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🤖🛠️"
+                android:textSize="22sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DROID-FORMATTER"
+                android:textColor="#38BDF8"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvDisplayStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Droid-Formatter Engine Online"
+            android:textColor="#FACC15"
+            android:textSize="12sp"
+            android:layout_marginBottom="12dp" />
 
         <Button
-            android:id="@+id/btnBootVirtualEngine"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_weight="1"
-            android:text="▶️ Boot OS"
+            android:id="@+id/btnDetectStorage"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="🔍 Detect SD Card / Storage"
             android:textColor="#FFFFFF"
-            android:textSize="9sp"
-            android:backgroundTint="#16A34A"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp" />
-
-        <Button
-            android:id="@+id/btnOpenSettings"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_weight="1"
-            android:text="⚙️ Settings"
-            android:textColor="#FFFFFF"
-            android:textSize="9sp"
-            android:backgroundTint="#475569"
-            android:layout_marginStart="4dp" />
+            android:backgroundTint="#2563EB" />
     </LinearLayout>
 
     <GridLayout
-        android:id="@+id/appGridContainer"
+        android:id="@+id/formatGridContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:alignmentMode="alignMargins"
-        android:columnCount="3"
-        android:padding="20dp"
-        android:visibility="visible"
-        android:background="#99020617">
+        android:columnCount="2"
+        android:padding="16dp">
     </GridLayout>
-
-    <TextView
-        android:id="@+id/tvDisplayStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#CC0F172A"
-        android:text="Status: SurfaceFlinger &amp; Touch Bridge Ready"
-        android:textColor="#38BDF8"
-        android:textSize="11sp"
-        android:textAlignment="center"
-        android:padding="8dp" />
 
 </RelativeLayout>
