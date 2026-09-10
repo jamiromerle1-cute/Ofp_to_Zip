@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
@@ -21,9 +22,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public native String stringFromNativeVM();
     public native boolean initNativeGraphics(Object surface);
     public native void renderFrameNative();
-    public native boolean mountExt4ImageNative(String imagePath);
+    public native boolean mountExt4ImageNative(String imagePath, String targetDir);
 
-    private static final int PICK_SYSTEM_IMG = 6006;
+    private static final int PICK_SYSTEM_IMG = 7007;
     private SurfaceView vmSurfaceView;
     private TextView tvEngineStatus, tvNativeLog;
     private String selectedImgPath = null;
@@ -56,12 +57,19 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 return;
             }
             
-            boolean isMounted = mountExt4ImageNative(selectedImgPath);
+            File targetRootDir = new File(getFilesDir(), "virtual_rootfs");
+            appendLog("
+[C++ EXT4 Driver] Analyzing Superblock & Parsing Image...");
+            boolean isMounted = mountExt4ImageNative(selectedImgPath, targetRootDir.getAbsolutePath());
+            
             if (isMounted) {
-                appendLog("[C++ NDK] EXT4 Image Linked. Native Graphics Pipeline Active.");
-                tvEngineStatus.setText("Status: Native GPU Framebuffer Engine Running");
+                appendLog("[C++ EXT4 Driver] RootFS Mount Point Ready: " + targetRootDir.getAbsolutePath());
+                appendLog("[C++ NDK] Starting GPU OpenGL Framebuffer Stream...");
+                tvEngineStatus.setText("Status: Native EXT4 Unpacker & GPU Pipeline Active");
                 tvEngineStatus.setTextColor(0xFF22C55E);
                 startNativeRenderingLoop();
+            } else {
+                appendLog("[C++ ERROR] Invalid or unreadable disk image file.");
             }
         });
     }
@@ -72,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             while (isRendering) {
                 renderFrameNative();
                 try {
-                    Thread.sleep(16); // ~60 FPS Loop
+                    Thread.sleep(16);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -82,9 +90,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        boolean gpuInit = initNativeGraphics(holder.getSurface());
-        if (gpuInit) {
-            appendLog("[C++ NDK] EGL & OpenGL ES Surface Successfully Bound to GPU.");
+        if (initNativeGraphics(holder.getSurface())) {
+            appendLog("[C++ NDK] EGL Window Surface Connected.");
         }
     }
 
@@ -98,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Uri uri = data.getData();
             if (uri != null) {
                 selectedImgPath = uri.getPath();
-                tvEngineStatus.setText("Status: system.img mapped (" + selectedImgPath + ")");
+                tvEngineStatus.setText("Status: Image Mapped (" + selectedImgPath + ")");
             }
         }
     }
