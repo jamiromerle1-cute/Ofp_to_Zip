@@ -3,74 +3,89 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0B0F19"
-    android:padding="20dp">
+    android:background="#090D16"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Virtual Android Engine"
+        android:text="Real Android Subsystem Environment"
         android:textColor="#38BDF8"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="10dp"/>
 
     <TextView
-        android:id="@+id/tvVirtualStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status: Virtual Environment Active (Offline)"
-        android:textColor="#22C55E"
-        android:textSize="13sp"
-        android:layout_marginBottom="20dp"/>
+        android:text="Offline Multi-Task Android Container Engine"
+        android:textColor="#64748B"
+        android:textSize="12sp"
+        android:layout_marginBottom="16dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="12dp">
 
         <Button
-            android:id="@+id/btnCreateSpace"
+            android:id="@+id/btnLaunchSettings"
             android:layout_width="0dp"
-            android:layout_height="55dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="➕ Launch Virtual App"
+            android:text="⚙️ Android Settings"
             android:textColor="#FFFFFF"
+            android:textSize="12sp"
             android:backgroundTint="#2563EB"
-            android:layout_marginEnd="6dp"/>
+            android:layout_marginEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnKillVirtual"
+            android:id="@+id/btnLaunchStorage"
             android:layout_width="0dp"
-            android:layout_height="55dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="⛔ Stop Virtual OS"
+            android:text="📁 System Files"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#DC2626"
-            android:layout_marginStart="6dp"/>
+            android:textSize="12sp"
+            android:backgroundTint="#0D9488"
+            android:layout_marginStart="4dp"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnPickRealApp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="📱 Run Real App Inside Subsystem Container"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:backgroundTint="#4F46E5"
+        android:layout_marginBottom="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Virtual Instance Process Log:"
+        android:text="Active Execution Logs:"
         android:textColor="#94A3B8"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:layout_marginBottom="8dp"/>
 
-    <TextView
-        android:id="@+id/tvVirtualLog"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#1E293B"
-        android:padding="12dp"
-        android:textColor="#F8FAFC"
-        android:fontFamily="monospace"
-        android:textSize="12sp"
-        android:text="[System] Initializing Virtual Subsystem...
-[Kernel] Virtual Process Sandbox Isolated.
-[Memory] 512MB Allocation Reserved.
-[Ready] Select an app to launch inside Virtual Android Environment."/>
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvExecutionLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#22C55E"
+            android:fontFamily="monospace"
+            android:textSize="11sp"
+            android:text="[Subsystem] Real Native Android Task Runtime Active.
+[Container] Offline Intent Interceptor Ready."/>
+    </ScrollView>
 
 </LinearLayout>
