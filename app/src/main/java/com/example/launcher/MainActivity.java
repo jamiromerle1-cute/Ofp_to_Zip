@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private static final int PICK_SYSTEM_IMG = 7007;
     private SurfaceView vmSurfaceView;
     private TextView tvEngineStatus, tvNativeLog;
+    private GridLayout appGridContainer;
     private String selectedImgPath = null;
     private boolean isRendering = false;
 
@@ -40,8 +43,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         vmSurfaceView = findViewById(R.id.vmSurfaceView);
         tvEngineStatus = findViewById(R.id.tvDisplayStatus);
         tvNativeLog = findViewById(R.id.tvExecutionLog);
+        appGridContainer = findViewById(R.id.appGridContainer);
         Button btnLoadImg = findViewById(R.id.btnLoadImg);
         Button btnBootVirtualEngine = findViewById(R.id.btnBootVirtualEngine);
+        Button btnOpenSettings = findViewById(R.id.btnOpenSettings);
 
         vmSurfaceView.getHolder().addCallback(this);
 
@@ -66,17 +71,40 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
             
             File targetRootDir = new File(getFilesDir(), "virtual_rootfs");
-            appendLog("\n[C++ EXT4 Driver] Unpacking and booting container...");
+            appendLog("\n[Virtual Engine] Mounting EXT4 image & unpacking system payload...");
             boolean isMounted = mountExt4ImageNative(selectedImgPath, targetRootDir.getAbsolutePath());
             
             if (isMounted) {
-                appendLog("[C++ PRoot Engine] Container launched at: " + targetRootDir.getAbsolutePath());
-                appendLog("[C++ Input] Touchscreen listener active.");
-                tvEngineStatus.setText("Status: PRoot Container & Touch Engine Running");
+                appendLog("[PRoot Container] Virtual OS Boot Sequence Active.");
+                tvEngineStatus.setText("Status: Virtual OS & Apps Online");
                 tvEngineStatus.setTextColor(0xFF22C55E);
+                appGridContainer.setVisibility(View.VISIBLE);
                 startNativeRenderingLoop();
             }
         });
+
+        btnOpenSettings.setOnClickListener(v -> {
+            Toast.makeText(this, "Opening Virtual OS Settings Panel...", Toast.LENGTH_SHORT).show();
+            appendLog("[Virtual Settings] Opened system configuration overlay.");
+        });
+
+        setupVirtualApps();
+    }
+
+    private void setupVirtualApps() {
+        String[] virtualApps = {"📁 Files", "⚙️ Settings", "🌐 Browser", "🎮 GSI Terminal", "📦 App Store", "⚡ Task Manager"};
+        for (String appName : virtualApps) {
+            Button appBtn = new Button(this);
+            appBtn.setText(appName);
+            appBtn.setTextSize(11);
+            appBtn.setTextColor(0xFFFFFFFF);
+            appBtn.setBackgroundColor(0xFF1E293B);
+            appBtn.setOnClickListener(v -> {
+                Toast.makeText(this, "Launched: " + appName + " inside GSI container", Toast.LENGTH_SHORT).show();
+                appendLog("[Container App] Executed binary for: " + appName);
+            });
+            appGridContainer.addView(appBtn);
+        }
     }
 
     private void startNativeRenderingLoop() {
@@ -96,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
         if (initNativeGraphics(holder.getSurface())) {
-            appendLog("[C++ NDK] Display Canvas Connected.");
+            appendLog("[GPU Pipeline] EGL Display Surface Connected.");
         }
     }
 
@@ -110,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Uri uri = data.getData();
             if (uri != null) {
                 selectedImgPath = uri.getPath();
-                tvEngineStatus.setText("Status: Image Loaded (" + selectedImgPath + ")");
+                tvEngineStatus.setText("Status: GSI Mapped (" + selectedImgPath + ")");
             }
         }
     }

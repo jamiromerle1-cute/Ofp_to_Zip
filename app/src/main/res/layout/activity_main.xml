@@ -13,26 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#CC0F172A"
+        android:background="#DD0F172A"
         android:padding="12dp"
         android:layout_alignParentTop="true">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Native Virtual Android OS Core"
+            android:text="Virtual GSI Booter &amp; Container Hub"
             android:textColor="#38BDF8"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvDisplayStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status: Waiting for system.img mount..."
+            android:text="Status: Waiting to mount system.img..."
             android:textColor="#FACC15"
-            android:textSize="12sp"
-            android:layout_marginBottom="8dp" />
+            android:textSize="11sp"
+            android:layout_marginBottom="6dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,33 +42,57 @@
             <Button
                 android:id="@+id/btnLoadImg"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:text="📂 Load system.img"
+                android:text="📂 Load Image"
                 android:textColor="#FFFFFF"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:backgroundTint="#2563EB"
-                android:layout_marginEnd="4dp" />
+                android:layout_marginEnd="2dp" />
 
             <Button
                 android:id="@+id/btnBootVirtualEngine"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:text="▶️ Boot Real GSI"
+                android:text="▶️ Boot GSI"
                 android:textColor="#FFFFFF"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:backgroundTint="#16A34A"
-                android:layout_marginStart="4dp" />
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp" />
+
+            <Button
+                android:id="@+id/btnOpenSettings"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="⚙️ Settings"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:backgroundTint="#475569"
+                android:layout_marginStart="2dp" />
         </LinearLayout>
     </LinearLayout>
 
+    <GridLayout
+        android:id="@+id/appGridContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:background="#CC020617">
+    </GridLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:layout_alignParentBottom="true"
-        android:background="#D9000000"
-        android:padding="8dp">
+        android:background="#E6000000"
+        android:padding="6dp">
 
         <TextView
             android:id="@+id/tvExecutionLog"
@@ -76,8 +100,8 @@
             android:layout_height="wrap_content"
             android:textColor="#38BDF8"
             android:fontFamily="monospace"
-            android:textSize="10sp"
-            android:text="[Engine Log Ready]" />
+            android:textSize="9sp"
+            android:text="[Engine Core] Ready for GSI Boot..." />
     </ScrollView>
 
 </RelativeLayout>
