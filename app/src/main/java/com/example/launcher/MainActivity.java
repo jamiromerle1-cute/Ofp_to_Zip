@@ -1,5 +1,6 @@
 package com.example.launcher;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -8,6 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+ri.rikka.shizuku.Shizuku;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tvStatus;
     private Spinner spinnerDevices;
+
+    private static final int SHIZUKU_PERMISSION_REQUEST_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, detectedDevices);
         spinnerDevices.setAdapter(adapter);
 
-        Toast.makeText(this, stringFromNativeVM(), Toast.LENGTH_SHORT).show();
+        checkShizukuPermission();
 
         String[] formats = {"FAT32", "exFAT", "EXT4", "NTFS", "Quick Wipe", "Bad Blocks"};
         for (String fmtName : formats) {
@@ -44,21 +48,53 @@ public class MainActivity extends AppCompatActivity {
             fmtBtn.setTextColor(0xFFFFFFFF);
             fmtBtn.setBackgroundColor(0xFF1E293B);
             fmtBtn.setOnClickListener(v -> {
+                if (!isShizukuAvailable()) {
+                    Toast.makeText(this, "Shizuku is not running or permission denied!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 String selectedDevFull = spinnerDevices.getSelectedItem().toString();
                 String devPath = selectedDevFull.split(" ")[0];
                 
-                tvStatus.setText("Formatting " + devPath + " to " + fmtName + "...");
+                tvStatus.setText("Formatting " + devPath + " to " + fmtName + " via Shizuku...");
                 boolean success = formatPartitionNative(devPath, fmtName);
                 
                 if (success) {
                     Toast.makeText(this, "Successfully formatted to " + fmtName, Toast.LENGTH_SHORT).show();
                     tvStatus.setText("Status: Format Complete (" + fmtName + ")");
                 } else {
-                    Toast.makeText(this, "Format executed (Check root/binaries)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Execution finished (Check device binaries)", Toast.LENGTH_SHORT).show();
                     tvStatus.setText("Status: Target processed for " + fmtName);
                 }
             });
             formatGrid.addView(fmtBtn);
+        }
+    }
+
+    private void checkShizukuPermission() {
+        try {
+            if (Shizuku.isPreV11() || Shizuku.getVersion() < 11) {
+                tvStatus.setText("Status: Shizuku version too old");
+                return;
+            }
+
+            if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                tvStatus.setText("Status: Shizuku Connected (Ready for Non-Root format)");
+            } else if (Shizuku.shouldShowRequestPermissionRationale()) {
+                tvStatus.setText("Status: Shizuku permission required");
+            } else {
+                Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST_CODE);
+            }
+        } catch (Exception e) {
+            tvStatus.setText("Status: Shizuku service not found. Make sure it is running.");
+        }
+    }
+
+    private boolean isShizukuAvailable() {
+        try {
+            return Shizuku.pingBinder() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

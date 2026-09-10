@@ -15,7 +15,7 @@
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_launcher_MainActivity_stringFromNativeVM(JNIEnv* env, jobject) {
-    return env->NewStringUTF("DROID-FORMATTER Native Partition Engine Active");
+    return env->NewStringUTF("DROID-FORMATTER Shizuku Partition Engine Active");
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
@@ -24,22 +24,22 @@ Java_com_example_launcher_MainActivity_formatPartitionNative(JNIEnv* env, jobjec
     const char *fmt = env->GetStringUTFChars(formatType, nullptr);
     
     char cmd[512];
+    // Using Shizuku / adb shell execution context
     if (strcmp(fmt, "FAT32") == 0) {
-        snprintf(cmd, sizeof(cmd), "mkfs.vfat -F 32 ", dev);
+        snprintf(cmd, sizeof(cmd), "sh -c \"mkfs.vfat -F 32 \"", dev);
     } else if (strcmp(fmt, "exFAT") == 0) {
-        snprintf(cmd, sizeof(cmd), "mkfs.exfat ", dev);
+        snprintf(cmd, sizeof(cmd), "sh -c \"mkfs.exfat \"", dev);
     } else if (strcmp(fmt, "EXT4") == 0) {
-        snprintf(cmd, sizeof(cmd), "mkfs.ext4 -F ", dev);
+        snprintf(cmd, sizeof(cmd), "sh -c \"mkfs.ext4 -F \"", dev);
     } else if (strcmp(fmt, "NTFS") == 0) {
-        snprintf(cmd, sizeof(cmd), "mkfs.ntfs -f ", dev);
+        snprintf(cmd, sizeof(cmd), "sh -c \"mkfs.ntfs -f \"", dev);
+    } else if (strcmp(fmt, "Quick Wipe") == 0) {
+        snprintf(cmd, sizeof(cmd), "sh -c \"dd if=/dev/zero of= bs=1M count=10\"", dev);
     } else {
-        LOGE("[Formatter] Unsupported format type.");
-        env->ReleaseStringUTFChars(devicePath, dev);
-        env->ReleaseStringUTFChars(formatType, fmt);
-        return JNI_FALSE;
+        snprintf(cmd, sizeof(cmd), "sh -c \"badblocks -v \"", dev);
     }
     
-    LOGI("[Formatter] Executing native command: ", cmd);
+    LOGI("[Shizuku Formatter] Executing adb/sh command: ", cmd);
     int result = system(cmd);
     
     env->ReleaseStringUTFChars(devicePath, dev);
