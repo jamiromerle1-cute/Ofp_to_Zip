@@ -27,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
             if (extDir != null) {
                 selectedStoragePath = extDir.getAbsolutePath();
                 tvStatus.setText("Target Mounted: " + selectedStoragePath);
-                Toast.STORAGE = Toast.makeText(this, "Storage target locked.", Toast.LENGTH_SHORT);
-                Toast.STORAGE.show();
+                Toast.makeText(this, "Storage target locked.", Toast.LENGTH_SHORT).show();
             }
         });
 
