@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
             
             File targetRootDir = new File(getFilesDir(), "virtual_rootfs");
-            appendLog("
-[C++ EXT4 Driver] Analyzing Superblock & Parsing Image...");
+            appendLog("\n[C++ EXT4 Driver] Analyzing Superblock & Parsing Image...");
             boolean isMounted = mountExt4ImageNative(selectedImgPath, targetRootDir.getAbsolutePath());
             
             if (isMounted) {
@@ -112,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private void appendLog(String log) {
         if (tvNativeLog != null) {
-            tvNativeLog.append("
-" + log);
+            tvNativeLog.append("\n" + log);
         }
     }
 }
