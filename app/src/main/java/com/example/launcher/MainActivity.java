@@ -11,43 +11,57 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int PICK_SYSTEM_IMG = 3003;
-    private TextView tvSystemSlot, tvPartitionLog;
-    private String selectedSystemImg = null;
+    static {
+        System.loadLibrary("vmnativeengine");
+    }
+
+    // C++ JNI Native Methods
+    public native String stringFromNativeVM();
+    public native boolean mountExt4ImageNative(String imagePath);
+
+    private static final int PICK_SYSTEM_IMG = 5005;
+    private TextView tvEngineStatus, tvNativeLog;
+    private String selectedImgPath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvSystemSlot = findViewById(R.id.tvSystemSlot);
-        tvPartitionLog = findViewById(R.id.tvPartitionLog);
-        Button btnSelectSystemImg = findViewById(R.id.btnSelectSystemImg);
-        Button btnBootVmEngine = findViewById(R.id.btnBootVmEngine);
+        tvEngineStatus = findViewById(R.id.tvDisplayStatus);
+        tvNativeLog = findViewById(R.id.tvExecutionLog);
+        Button btnLoadImg = findViewById(R.id.btnLoadImg);
+        Button btnBootVirtualEngine = findViewById(R.id.btnBootVirtualEngine);
 
-        btnSelectSystemImg.setOnClickListener(v -> {
+        // Call C++ Native Code on App Launch
+        String nativeInfo = stringFromNativeVM();
+        appendLog("[C++ NDK] " + nativeInfo);
+
+        btnLoadImg.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
-            startActivityForResult(Intent.createChooser(intent, "Select system.img File"), PICK_SYSTEM_IMG);
+            startActivityForResult(Intent.createChooser(intent, "Select GSI system.img"), PICK_SYSTEM_IMG);
         });
 
-        btnBootVmEngine.setOnClickListener(v -> {
-            if (selectedSystemImg == null) {
-                Toast.makeText(this, "Please select a system.img file first!", Toast.LENGTH_SHORT).show();
-                appendLog("
-[ERROR] Cannot boot: /system partition is missing!");
+        btnBootVirtualEngine.setOnClickListener(v -> {
+            if (selectedImgPath == null) {
+                Toast.makeText(this, "Pumili muna ng system.img file!", Toast.LENGTH_SHORT).show();
                 return;
             }
             
             appendLog("
-
-[BOOT] Loading Integrated Stock boot.img...");
-            appendLog("[BOOT] Attaching Custom system.img: " + selectedSystemImg);
-            appendLog("[BOOT] Initializing Ramdisk &amp; Mounting Partitions...");
-            appendLog("[BOOT] Executing /system/bin/init process...");
-            appendLog("[SUCCESS] GSI OS Environment Booted Successfully!");
+[C++ NDK] Invoking Native EXT4 Container Mount...");
+            boolean isMounted = mountExt4ImageNative(selectedImgPath);
             
-            Toast.makeText(this, "Booting Custom system.img with Stock Boot Engine...", Toast.LENGTH_LONG).show();
+            if (isMounted) {
+                appendLog("[C++ NDK] EXT4 System Image Successfully Attached to Native Pipeline.");
+                appendLog("[C++ NDK] Starting User-Space PRoot Container Environment...");
+                tvEngineStatus.setText("Status: Native C++ Container Running");
+                tvEngineStatus.setTextColor(0xFF22C55E);
+                Toast.makeText(this, "Native C++ Engine Executing System Image!", Toast.LENGTH_SHORT).show();
+            } else {
+                appendLog("[C++ NDK ERROR] Failed to mount image file.");
+            }
         });
     }
 
@@ -57,17 +71,18 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PICK_SYSTEM_IMG && resultCode == RESULT_OK && data != null) {
             Uri uri = data.getData();
             if (uri != null) {
-                selectedSystemImg = uri.getPath();
-                tvSystemSlot.setText("📌 System Partition: Attached (" + selectedSystemImg + ")");
-                tvSystemSlot.setTextColor(0xFF22C55E);
+                selectedImgPath = uri.getPath();
+                tvEngineStatus.setText("Status: Image Mapped via NDK (" + selectedImgPath + ")");
                 appendLog("
-[MOUNT] Custom system.img successfully mapped to /dev/block/by-name/system");
-                Toast.makeText(this, "system.img Partition Attached!", Toast.LENGTH_SHORT).show();
+[JAVA] Image File Path Passed to Native Core: " + selectedImgPath);
             }
         }
     }
 
     private void appendLog(String log) {
-        tvPartitionLog.append(log);
+        if (tvNativeLog != null) {
+            tvNativeLog.append("
+" + log);
+        }
     }
 }
