@@ -3,89 +3,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#090D16"
-    android:padding="16dp">
+    android:background="#070A13"
+    android:padding="20dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Real Android Subsystem Environment"
+        android:text="Virtual OS Partition Manager"
         android:textColor="#38BDF8"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:layout_marginTop="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Offline Multi-Task Android Container Engine"
+        android:text="Stock Boot Core + Custom system.img Loader"
         android:textColor="#64748B"
         android:textSize="12sp"
         android:layout_marginBottom="16dp"/>
 
+    <!-- Partition Status Cards -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:background="#1E293B"
+        android:padding="12dp"
         android:layout_marginBottom="12dp">
 
-        <Button
-            android:id="@+id/btnLaunchSettings"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="⚙️ Android Settings"
-            android:textColor="#FFFFFF"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📌 Boot Partition: Integrated Stock Kernel (boot.img)"
+            android:textColor="#22C55E"
             android:textSize="12sp"
-            android:backgroundTint="#2563EB"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginBottom="4dp"/>
 
-        <Button
-            android:id="@+id/btnLaunchStorage"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="📁 System Files"
-            android:textColor="#FFFFFF"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📌 Vendor Partition: Generic Vendor Overlay (vendor.img)"
+            android:textColor="#22C55E"
             android:textSize="12sp"
-            android:backgroundTint="#0D9488"
-            android:layout_marginStart="4dp"/>
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvSystemSlot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📌 System Partition: [EMPTY - Load system.img]" 
+            android:textColor="#FACC15"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnPickRealApp"
+        android:id="@+id/btnSelectSystemImg"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="📱 Run Real App Inside Subsystem Container"
+        android:layout_height="55dp"
+        android:text="📂 Select Custom system.img (GSI)"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:backgroundTint="#2563EB"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnBootVmEngine"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="▶️ Boot Virtual Machine"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
         android:textStyle="bold"
-        android:backgroundTint="#4F46E5"
+        android:backgroundTint="#16A34A"
         android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Active Execution Logs:"
-        android:textColor="#94A3B8"
-        android:textSize="13sp"
-        android:layout_marginBottom="8dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1E293B"
+        android:background="#0F172A"
         android:padding="12dp">
 
         <TextView
-            android:id="@+id/tvExecutionLog"
+            android:id="@+id/tvPartitionLog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#22C55E"
+            android:textColor="#38BDF8"
             android:fontFamily="monospace"
             android:textSize="11sp"
-            android:text="[Subsystem] Real Native Android Task Runtime Active.
-[Container] Offline Intent Interceptor Ready."/>
+            android:text="[Hypervisor] Stock boot.img &amp; kernel loaded in virtual RAM.
+Select system.img to attach /system partition."/>
     </ScrollView>
 
 </LinearLayout>
