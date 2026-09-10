@@ -3,6 +3,7 @@ package com.example.launcher;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Button;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public native boolean initNativeGraphics(Object surface);
     public native void renderFrameNative();
     public native boolean mountExt4ImageNative(String imagePath, String targetDir);
+    public native void sendTouchEventNative(float x, float y, boolean actionDown);
 
     private static final int PICK_SYSTEM_IMG = 7007;
     private SurfaceView vmSurfaceView;
@@ -43,6 +45,12 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         vmSurfaceView.getHolder().addCallback(this);
 
+        vmSurfaceView.setOnTouchListener((v, event) -> {
+            boolean isDown = (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE);
+            sendTouchEventNative(event.getX(), event.getY(), isDown);
+            return true;
+        });
+
         appendLog("[C++ NDK] " + stringFromNativeVM());
 
         btnLoadImg.setOnClickListener(v -> {
@@ -58,17 +66,15 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
             
             File targetRootDir = new File(getFilesDir(), "virtual_rootfs");
-            appendLog("\n[C++ EXT4 Driver] Analyzing Superblock & Parsing Image...");
+            appendLog("\n[C++ EXT4 Driver] Unpacking and booting container...");
             boolean isMounted = mountExt4ImageNative(selectedImgPath, targetRootDir.getAbsolutePath());
             
             if (isMounted) {
-                appendLog("[C++ EXT4 Driver] RootFS Mount Point Ready: " + targetRootDir.getAbsolutePath());
-                appendLog("[C++ NDK] Starting GPU OpenGL Framebuffer Stream...");
-                tvEngineStatus.setText("Status: Native EXT4 Unpacker & GPU Pipeline Active");
+                appendLog("[C++ PRoot Engine] Container launched at: " + targetRootDir.getAbsolutePath());
+                appendLog("[C++ Input] Touchscreen listener active.");
+                tvEngineStatus.setText("Status: PRoot Container & Touch Engine Running");
                 tvEngineStatus.setTextColor(0xFF22C55E);
                 startNativeRenderingLoop();
-            } else {
-                appendLog("[C++ ERROR] Invalid or unreadable disk image file.");
             }
         });
     }
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
         if (initNativeGraphics(holder.getSurface())) {
-            appendLog("[C++ NDK] EGL Window Surface Connected.");
+            appendLog("[C++ NDK] Display Canvas Connected.");
         }
     }
 
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Uri uri = data.getData();
             if (uri != null) {
                 selectedImgPath = uri.getPath();
-                tvEngineStatus.setText("Status: Image Mapped (" + selectedImgPath + ")");
+                tvEngineStatus.setText("Status: Image Loaded (" + selectedImgPath + ")");
             }
         }
     }

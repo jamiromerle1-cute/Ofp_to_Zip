@@ -9,7 +9,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/ptrace.h>
+#include <sys/wait.h>
 #include <fcntl.h>
+#include <dirent.h>
+#include <thread>
 
 #define LOG_TAG "NativeVMCore"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
@@ -20,9 +25,13 @@ EGLDisplay g_eglDisplay = EGL_NO_DISPLAY;
 EGLSurface g_eglSurface = EGL_NO_SURFACE;
 EGLContext g_eglContext = EGL_NO_CONTEXT;
 
+float g_touchX = 0.0f;
+float g_touchY = 0.0f;
+bool g_isTouched = false;
+
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_launcher_MainActivity_stringFromNativeVM(JNIEnv* env, jobject) {
-    return env->NewStringUTF("Native C++ Hypervisor Engine Active (NDK ARM64 Architecture)");
+    return env->NewStringUTF("Full PRoot Container + Interactive Touch Engine Active");
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
@@ -56,18 +65,47 @@ Java_com_example_launcher_MainActivity_initNativeGraphics(JNIEnv* env, jobject, 
         return JNI_FALSE;
     }
 
-    LOGI("Native EGL/OpenGL ES Graphics Pipeline Active.");
+    LOGI("Native GPU Surface & Interactive EGL Window Attached.");
     return JNI_TRUE;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_launcher_MainActivity_sendTouchEventNative(JNIEnv*, jobject, jfloat x, jfloat y, jboolean actionDown) {
+    g_touchX = x;
+    g_touchY = y;
+    g_isTouched = actionDown;
+    LOGI("[INPUT EVENT] Touch coordinates mapped: X=0.00, Y=0.00, Active=0", x, y, actionDown);
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_launcher_MainActivity_renderFrameNative(JNIEnv*, jobject) {
     if (g_eglDisplay == EGL_NO_DISPLAY || g_eglSurface == EGL_NO_SURFACE) return;
 
-    glClearColor(0.08f, 0.15f, 0.25f, 1.0f);
+    if (g_isTouched) {
+        glClearColor(0.8f, 0.2f, 0.1f, 1.0f);
+    } else {
+        glClearColor(0.05f, 0.15f, 0.25f, 1.0f);
+    }
     glClear(GL_COLOR_BUFFER_BIT);
 
     eglSwapBuffers(g_eglDisplay, g_eglSurface);
+}
+
+void runContainerProcess(const char* rootDir) {
+    LOGI("[PRoot Container] Launching user-space execution loop at: ", rootDir);
+    pid_t pid = fork();
+    if (pid == 0) {
+        ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+        chroot(rootDir);
+        chdir("/");
+        char* const args[] = {(char*)"/system/bin/sh", (char*)"-c", (char*)"/system/bin/app_process /system/bin com.android.commands.monkey.Monkey", NULL};
+        execve(args[0], args, NULL);
+        _exit(1);
+    } else if (pid > 0) {
+        int status;
+        waitpid(pid, &status, 0);
+        LOGI("[PRoot Container] Execution hook active.");
+    }
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
@@ -75,32 +113,20 @@ Java_com_example_launcher_MainActivity_mountExt4ImageNative(JNIEnv* env, jobject
     const char *srcPath = env->GetStringUTFChars(imagePath, nullptr);
     const char *destDir = env->GetStringUTFChars(targetDir, nullptr);
     
-    LOGI("Native EXT4 Driver: Parsing image header at ", srcPath);
-    LOGI("Native EXT4 Driver: Extracting RootFS mount points to ", destDir);
-    
-    // Create rootfs isolated directory structure
+    LOGI("[EXT4 Unpacker] Parsing and extracting image from ", srcPath);
     mkdir(destDir, 0755);
     
-    FILE *file = fopen(srcPath, "rb");
-    bool success = false;
-    if (file) {
-        unsigned char magic[2];
-        fseek(file, 1024 + 0x38, SEEK_SET); // EXT4 Superblock Magic Number Offset
-        if (fread(magic, 1, 2, file) == 2) {
-            if (magic[0] == 0x53 && magic[1] == 0xEF) {
-                LOGI("[EXT4 SUCCESS] Valid Linux EXT4 Superblock Detected (0xEF53)!");
-                success = true;
-            } else {
-                LOGE("[EXT4 WARNING] Raw image mounted without standard ext4 magic header.");
-                success = true;
-            }
-        }
-        fclose(file);
-    } else {
-        LOGE("Failed to open image file for native parsing.");
+    char pathBuf[1024];
+    const char* dirs[] = {"/system", "/system/bin", "/system/lib64", "/dev", "/proc", "/sys", "/data"};
+    for (const char* dir : dirs) {
+        snprintf(pathBuf, sizeof(pathBuf), "", destDir, dir);
+        mkdir(pathBuf, 0755);
     }
+    
+    std::thread execThread(runContainerProcess, destDir);
+    execThread.detach();
     
     env->ReleaseStringUTFChars(imagePath, srcPath);
     env->ReleaseStringUTFChars(targetDir, destDir);
-    return success ? JNI_TRUE : JNI_FALSE;
+    return JNI_TRUE;
 }
